@@ -8,12 +8,8 @@ class Post
   end
 
   def published
-    date = @json.dig("date")
-    if date
-      date = Time.at(date)
-    else
-      date = Time.now
-    end
+    date = @json.dig("date") || Time.now.to_i
+    date = Time.at(date)
     date.utc.strftime '%Y-%m-%dT%H:%M:%S%z'
   end
 

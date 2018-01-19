@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 require "erb"
-require "webrick"
-require "json"
-require "net/http"
 require "uri"
+require "json"
+require "webrick"
+require "net/http"
 
 require_relative "./feed"
 require_relative "./post"
