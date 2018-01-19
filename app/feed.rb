@@ -10,12 +10,20 @@ class Feed
   end
 
   def posts
-    @json.dig("user", "media", "nodes").map do |post_json|
-      Post.new(post_json, @json, @options)
+    @json.dig("user", "media", "nodes").map do |post|
+      Post.new(post)
     end
   end
 
+  def author
+    "@#{@json.dig("user", "username")}"
+  end
+
+  def embed?
+    @options.include?("embed")
+  end
+
   def render
-    ERB.new(@template).result( binding )
+    ERB.new(@template).result(binding)
   end
 end

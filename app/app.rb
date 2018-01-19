@@ -36,12 +36,11 @@ class Server < WEBrick::HTTPServlet::AbstractServlet
   def do_GET (request, response)
     response.keep_alive = false
     case request.path
-        when "/feed"
-            response = feed(request, response)
-        when "/favicon.ico"
-            response = favicon(request, response)
+    when "/feed"
+      feed(request, response)
+    when "/favicon.ico"
+      favicon(request, response)
     end
-
   rescue => exception
     puts "------------------------"
     puts exception.inspect

@@ -5,11 +5,23 @@
         <entry>
             <link href="<%= post.url %>" />
             <author>
-                <name><%= post.author %></name>
+                <name><%= author %></name>
             </author>
             <published><%= post.published %></published>
             <id><%= post.id %></id>
-            <content type="html"><![CDATA[<%= post.content %>]]></content>
+            <content type="html">
+                <![CDATA[
+                    <% if embed? %>
+                        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="<%= post.url %>" data-instgrm-version="8">
+                            <img src="<%= post.display_src %>">
+                            <p><%= post.caption %></p>
+                        </blockquote>
+                    <% else %>
+                        <a href="<%= post.url %>"><img src="<%= post.display_src %>"></a>
+                        <pre><%= post.caption %></pre>
+                    <% end %>
+                ]]>
+            </content>
         </entry>
     <% end %>
 </feed>

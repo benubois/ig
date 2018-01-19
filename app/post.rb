@@ -1,12 +1,6 @@
 class Post
-  def initialize(json, feed_json, options)
+  def initialize(json)
     @json = json
-    @feed_json = feed_json
-    @options = options
-  end
-
-  def author
-    "@#{@feed_json.dig("user", "username")}"
   end
 
   def url
@@ -27,32 +21,16 @@ class Post
     @json.dig("id")
   end
 
-  def content
-    if @options.include?("embed")
-      embed
-    else
-      image
-    end
+  def display_src
+    @json.dig("display_src")
   end
 
-  def image
-    pre = ""
+  def caption
     if @json.dig("is_video")
-      pre += "📺 "
+      "📺 " + @json.dig("caption")
+    else
+      @json.dig("caption")
     end
-    <<-EOD
-      <a href="#{url}"><img src="#{@json.dig("display_src")}"></a>
-      <pre>#{pre}#{@json.dig("caption")}</pre>
-    EOD
-  end
-
-  def embed
-    <<-EOD
-    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="#{url}" data-instgrm-version="8">
-        <img src="#{@json.dig("display_src")}">
-        <p>#{@json.dig("caption")}</p>
-    </blockquote>
-    EOD
   end
 
 end
