@@ -14,7 +14,7 @@ class Request
       if response.code == "200"
         JSON.parse(response.body)
       else
-        nil
+        raise "Unexpected result"
       end
     end
   end
