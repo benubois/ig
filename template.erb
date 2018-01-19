@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><%= title %></title>
+    <% posts.each do |post| %>
+        <entry>
+            <link href="<%= post.url %>" />
+            <published><%= post.published %></published>
+            <id><%= post.id %></id>
+            <content type="html"><![CDATA[<%= post.content %>]]></content>
+        </entry>
+    <% end %>
+</feed>
