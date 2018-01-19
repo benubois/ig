@@ -6,9 +6,9 @@ require "json"
 require "net/http"
 require "uri"
 
-require "./feed"
-require "./post"
-require "./request"
+require_relative "./feed"
+require_relative "./post"
+require_relative "./request"
 
 def feed(request, response)
   if username = request.query["username"]
@@ -29,7 +29,7 @@ end
 def favicon(request, response)
   response.status = 200
   response.content_type = "image/x-icon"
-  response.body = File.read("./favicon.ico")
+  response.body = File.read(File.join(File.dirname(__FILE__), "favicon.ico"))
 end
 
 class Server < WEBrick::HTTPServlet::AbstractServlet

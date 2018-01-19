@@ -2,7 +2,7 @@ class Feed
   def initialize(json, options)
     @json = json
     @options = options
-    @template = File.read("./template.erb")
+    @template = File.read(File.join(File.dirname(__FILE__), "template.erb"))
   end
 
   def title
