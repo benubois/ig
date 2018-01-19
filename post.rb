@@ -36,9 +36,13 @@ class Post
   end
 
   def image
+    pre = ""
+    if @json.dig("is_video")
+      pre += "📺 "
+    end
     <<-EOD
-      <img src="#{@json.dig("display_src")}">
-      <p>#{@json.dig("caption")}</p>
+      <a href="#{url}"><img src="#{@json.dig("display_src")}"></a>
+      <p>#{pre}#{@json.dig("caption")}</p>
     EOD
   end
 
