@@ -42,7 +42,7 @@ class Post
     end
     <<-EOD
       <a href="#{url}"><img src="#{@json.dig("display_src")}"></a>
-      <p>#{pre}#{@json.dig("caption")}</p>
+      <pre>#{pre}#{@json.dig("caption")}</pre>
     EOD
   end
 
