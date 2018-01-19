@@ -1,6 +1,7 @@
 class Feed
-  def initialize(json)
+  def initialize(json, options)
     @json = json
+    @options = options
     @template = File.read("./template.erb")
   end
 
@@ -10,7 +11,7 @@ class Feed
 
   def posts
     @json.dig("user", "media", "nodes").map do |post_json|
-      Post.new(post_json)
+      Post.new(post_json, @json, @options)
     end
   end
 

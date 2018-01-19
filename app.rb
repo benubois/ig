@@ -12,9 +12,17 @@ require "./request"
 
 cgi = CGI.new
 username = cgi.params["username"].first
+options = cgi.params["options"].first
+
+if options
+  options = options.split(",")
+else
+  options = []
+end
+
 request = Request.new(username)
 if result = request.result
-  feed = Feed.new(result)
+  feed = Feed.new(result, options)
   output = feed.render
 else
   output = "ERROR"

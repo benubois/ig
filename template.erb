@@ -4,6 +4,9 @@
     <% posts.each do |post| %>
         <entry>
             <link href="<%= post.url %>" />
+            <author>
+                <name><%= post.author %></name>
+            </author>
             <published><%= post.published %></published>
             <id><%= post.id %></id>
             <content type="html"><![CDATA[<%= post.content %>]]></content>
