@@ -1,4 +1,5 @@
 class Post
+
   def initialize(json)
     @json = json
   end
@@ -23,7 +24,7 @@ class Post
 
   def caption
     if @json.dig("is_video")
-      "📺 " + @json.dig("caption")
+      "📺 #{@json.dig("caption")}"
     else
       @json.dig("caption")
     end
