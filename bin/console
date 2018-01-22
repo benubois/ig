@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require_relative "../app/app"
+require "irb"
+IRB.start(__FILE__)

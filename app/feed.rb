@@ -1,27 +1,28 @@
 class Feed
 
-  def initialize(json, options)
-    @json = json
+  def initialize(data, options)
+    @data = data
     @options = options
     @template = File.read(File.expand_path('../template.erb', __FILE__))
   end
 
   def title
-    "#{@json.dig("user", "full_name")} on Instagram"
-  end
-
-  def posts
-    @json.dig("user", "media", "nodes").map do |post|
-      Post.new(post)
-    end
+    "#{@data.dig("user", "full_name")} on Instagram"
   end
 
   def author
-    "@#{@json.dig("user", "username")}"
+    "@#{@data.dig("user", "username")}"
   end
 
   def embed?
     @options.include?("embed")
+  end
+
+  def posts
+    nodes = @data.dig("user", "media", "nodes") || []
+    nodes.map do |post|
+      Post.new(post)
+    end
   end
 
   def render

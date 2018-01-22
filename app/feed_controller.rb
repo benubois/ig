@@ -1,6 +1,6 @@
 class FeedController < WEBrick::HTTPServlet::AbstractServlet
 
-  def do_GET (request, response)
+  def do_GET(request, response)
     response.keep_alive = false
     case request.path
     when "/feed"
