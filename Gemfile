@@ -5,3 +5,5 @@ group :test do
   gem "rake"
   gem "minitest"
 end
+
+gem 'coveralls', require: false

@@ -13,7 +13,7 @@ class FeedControllerTest < Minitest::Test
     to_return(status: 200, body: '{"key": "value"}')
 
     controller = FeedController.new(@server)
-    data = controller.do_GET(@request, @response)
+    controller.do_GET(@request, @response)
 
     assert_equal(false, @response.keep_alive)
     assert_equal(200, @response.status)
