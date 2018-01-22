@@ -6,14 +6,6 @@ class FeedController < WEBrick::HTTPServlet::AbstractServlet
     when "/feed"
       feed(request, response)
     end
-  rescue => exception
-    puts "------------------------"
-    puts exception.inspect
-    puts exception.backtrace.inspect
-    puts "------------------------"
-    response.status = 500
-    response.content_type = "text/plain"
-    response.body = "ERROR"
   end
 
   def feed(request, response)
