@@ -7,7 +7,7 @@ class Feed
   end
 
   def title
-    "#{@data.dig("user", "full_name")} on Instagram"
+    @data.dig("user", "full_name") || @data.dig("user", "username")
   end
 
   def author

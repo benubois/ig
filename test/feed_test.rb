@@ -21,7 +21,7 @@ class FeedTest < Minitest::Test
   end
 
   def test_has_title
-    assert_equal("#{@data["user"]["full_name"]} on Instagram", @feed.title)
+    assert_equal("#{@data["user"]["full_name"]}", @feed.title)
   end
 
   def test_has_author
