@@ -7,11 +7,11 @@ class Feed
   end
 
   def title
-    @data.dig("user", "full_name") || @data.dig("user", "username")
+    @data.dig("graphql", "user", "full_name") || @data.dig("graphql", "user", "username")
   end
 
   def author
-    "@#{@data.dig("user", "username")}"
+    "@#{@data.dig("graphql", "user", "username")}"
   end
 
   def embed?
@@ -19,7 +19,7 @@ class Feed
   end
 
   def posts
-    nodes = @data.dig("user", "media", "nodes") || []
+    nodes = @data.dig("graphql", "user", "edge_owner_to_timeline_media", "edges") || []
     nodes.map do |post|
       Post.new(post)
     end
