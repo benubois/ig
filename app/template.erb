@@ -11,8 +11,9 @@
             <id><%= post.id %></id>
             <content type="html">
                 <![CDATA[
-                    <a href="<%= post.url %>"><img src="<%= post.display_src %>"></a>
-                    <pre><%= post.caption %></pre>
+                    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="<%= post.url %>" data-instgrm-version="8">
+                        <a href="<%= post.url %>"><img src="<%= post.display_src %>"></a>
+                    </blockquote>
                 ]]>
             </content>
         </entry>
