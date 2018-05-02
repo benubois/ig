@@ -1,27 +1,26 @@
 class Feed
 
-  def initialize(data, options)
-    @data = data
-    @options = options
+  def initialize(username, shortcodes)
+    @username = username
+    @shortcodes = shortcodes
     @template = File.read(File.expand_path('../template.erb', __FILE__))
   end
 
   def title
-    @data.dig("graphql", "user", "full_name") || @data.dig("graphql", "user", "username")
+    "@#{@username}"
   end
 
   def author
-    "@#{@data.dig("graphql", "user", "username")}"
+    "@#{@username}"
   end
 
   def embed?
-    @options.include?("embed")
+    false
   end
 
   def posts
-    nodes = @data.dig("graphql", "user", "edge_owner_to_timeline_media", "edges") || []
-    nodes.map do |post|
-      Post.new(post)
+    @shortcodes.map do |shortcode|
+      Post.new(shortcode)
     end
   end
 

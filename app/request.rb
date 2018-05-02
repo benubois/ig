@@ -12,7 +12,7 @@ class Request
       response = http.request(request)
 
       if response.code == "200"
-        JSON.parse(response.body)
+        response.body.scan(/"shortcode":"(.*?)"/).flatten
       else
         raise "Unexpected result"
       end
@@ -23,8 +23,7 @@ class Request
     @uri ||= begin
       URI::HTTPS.build(
         host: "www.instagram.com",
-        path: "/#{@user}/",
-        query: "__a=1",
+        path: "/#{@user}/"
       )
     end
   end

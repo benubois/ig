@@ -10,12 +10,10 @@ class FeedController < WEBrick::HTTPServlet::AbstractServlet
 
   def feed(request, response)
     if username = request.query["username"]
-      options = request.query["options"]
-      options = options ? options.split(",") : []
 
       request = Request.new(username)
       result = request.result
-      feed = Feed.new(result, options)
+      feed = Feed.new(username, result)
       body = feed.render
 
       response.status = 200

@@ -1,33 +1,28 @@
 class Post
 
-  def initialize(data)
-    @data = data
+  def initialize(shortcode)
+    @shortcode = shortcode
   end
 
   def url
-    "https://www.instagram.com/p/#{@data.dig("node", "shortcode")}/"
+    "https://www.instagram.com/p/#{@shortcode}/"
   end
 
   def published
-    date = @data.dig("node", "taken_at_timestamp") || Time.now.to_i
-    date = Time.at(date)
+    date = Time.now
     date.utc.strftime '%Y-%m-%dT%H:%M:%S%z'
   end
 
   def id
-    @data.dig("node", "id")
+    @shortcode
   end
 
   def display_src
-    @data.dig("node", "display_url")
+    "https://instagram.com/p/#{@shortcode}/media/?size=l"
   end
 
   def caption
-    text = @data.dig("node", "edge_media_to_caption", "edges", 0, "node", "text")
-    if @data.dig("node", "is_video")
-      text = "📺 #{text}"
-    end
-    text
+    ""
   end
 
 end
