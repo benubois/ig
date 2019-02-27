@@ -11,9 +11,8 @@ class FeedController < WEBrick::HTTPServlet::AbstractServlet
   def feed(request, response)
     if username = request.query["username"]
 
-      request = Request.new(username)
-      result = request.result
-      feed = Feed.new(username, result)
+      shortcodes = Shortcodes.find(username).first(2)
+      feed = Feed.new(username, shortcodes)
       body = feed.render
 
       response.status = 200

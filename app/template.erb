@@ -11,9 +11,12 @@
             <id><%= post.id %></id>
             <content type="html">
                 <![CDATA[
-                    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="<%= post.url %>" data-instgrm-version="8">
-                        <a href="<%= post.url %>"><img src="<%= post.display_src %>"></a>
-                    </blockquote>
+                <% if post.video_url %>
+                    <video src="<%= post.video_url %>" poster="<%= post.display_src %>" />
+                <% else %>
+                    <a href="<%= post.display_src %>"><img src="<%= post.display_src %>"></a>
+                <% end %>
+                <p><%= post.caption %></p>
                 ]]>
             </content>
         </entry>

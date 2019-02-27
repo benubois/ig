@@ -1,4 +1,8 @@
-class Request
+class Shortcodes
+
+  def self.find(user)
+    new(user).result
+  end
 
   def initialize(user)
     @user = user

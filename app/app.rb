@@ -10,5 +10,5 @@ require "net/http"
 
 require_relative "feed"
 require_relative "post"
-require_relative "request"
+require_relative "shortcodes"
 require_relative "feed_controller"
