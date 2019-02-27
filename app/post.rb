@@ -1,6 +1,3 @@
-require "uri"
-require "net/http"
-
 class Post
 
   def initialize(shortcode, username)
@@ -30,7 +27,7 @@ class Post
   end
 
   def video_url
-    post_markup.scan(/<meta.*property="og:video".*content="(.*)".*\/>/i).flatten.first
+    post_markup.scan(/<meta.*og:video.*content="(.*)".*/i).flatten.first
   end
 
   def profile_image_url
@@ -38,22 +35,26 @@ class Post
   end
 
   def author_name
-    post_markup.scan(/<meta.*property="og:title".*content="(.*)".*\/>/i).flatten.first.split(" on Instagram").first
+    name = post_markup.scan(/<meta.*og:title.*content="(.*)/i).flatten.first.split(" on Instagram")
+    if name.length > 1
+      name.first
+    else
+      @username
+    end
+  rescue
+    @username
   end
 
   def media
     if video_url
-      "<video src='#{video_url}' poster='#{display_src}' />"
+      %Q(<video src="#{video_url}" poster="#{display_src}" />)
     else
-      "<a href='#{display_src}'><img src='#{display_src}' /></a>"
+      %Q(<a href="#{display_src}"><img src="#{display_src}" /></a>)
     end
   end
 
   def html
-    <<~HEREDOC
-    <p>#{media}</p>
-    <p>#{caption}</p>
-    HEREDOC
+    %Q(<p>#{media}</p> <p>#{caption}</p>)
   end
 
   def item
@@ -66,7 +67,7 @@ class Post
         name: author_name,
         url: "https://instagram.com/#{@username}",
         avatar: profile_image_url,
-        _microblog: {
+        _instagram: {
           username: @username
         }
       }
@@ -88,7 +89,7 @@ class Post
           host: "www.instagram.com",
           path: "/p/#{@shortcode}/"
         )
-        request(uri).body.force_encoding("UTF-8")
+        Request.get(uri)
       end
     end
 
@@ -99,7 +100,7 @@ class Post
           path: "/oembed/",
           query: "url=#{url}"
         )
-        JSON.load(request(uri).body)
+        JSON.load(Request.get(uri))
       end
     end
 

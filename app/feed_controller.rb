@@ -12,12 +12,16 @@ class FeedController < WEBrick::HTTPServlet::AbstractServlet
     if username = request.query["username"]
 
       shortcodes = Shortcodes.find(username)
-      feed = Feed.new(username, shortcodes, request.request_uri)
-      body = feed.render
+      if shortcodes
+        feed = Feed.new(username, shortcodes, request.request_uri)
+        body = feed.render
 
-      response.status = 200
-      response.content_type = "application/json; charset=utf-8"
-      response.body = body
+        response.status = 200
+        response.content_type = "application/json; charset=utf-8"
+        response.body = body
+      else
+        raise "Unexpected result"
+      end
     end
   end
 
