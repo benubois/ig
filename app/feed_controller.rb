@@ -11,12 +11,12 @@ class FeedController < WEBrick::HTTPServlet::AbstractServlet
   def feed(request, response)
     if username = request.query["username"]
 
-      shortcodes = Shortcodes.find(username).first(2)
-      feed = Feed.new(username, shortcodes)
+      shortcodes = Shortcodes.find(username)
+      feed = Feed.new(username, shortcodes, request.request_uri)
       body = feed.render
 
       response.status = 200
-      response.content_type = "text/xml"
+      response.content_type = "application/json; charset=utf-8"
       response.body = body
     end
   end

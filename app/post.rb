@@ -1,11 +1,11 @@
 require "uri"
 require "net/http"
-require "json"
 
 class Post
 
-  def initialize(shortcode)
+  def initialize(shortcode, username)
     @shortcode = shortcode
+    @username = username
   end
 
   def url
@@ -30,13 +30,47 @@ class Post
   end
 
   def video_url
-    post_markup.body.scan(/<meta.*property="og:video".*content="(.*)".*\/>/i).flatten.first
+    post_markup.scan(/<meta.*property="og:video".*content="(.*)".*\/>/i).flatten.first
   end
 
   def profile_image_url
-    post_markup.scan(/"profile_pic_url":"([^"]+)","username":"#{Regexp.quote(screen_name)}"/).flatten.first
-  rescue
-    nil
+    post_markup.scan(/"profile_pic_url":"([^"]+)","username":"#{Regexp.quote(@username)}"/).flatten.first
+  end
+
+  def author_name
+    post_markup.scan(/<meta.*property="og:title".*content="(.*)".*\/>/i).flatten.first.split(" on Instagram").first
+  end
+
+  def media
+    if video_url
+      "<video src='#{video_url}' poster='#{display_src}' />"
+    else
+      "<a href='#{display_src}'><img src='#{display_src}' /></a>"
+    end
+  end
+
+  def html
+    <<~HEREDOC
+    <p>#{media}</p>
+    <p>#{caption}</p>
+    HEREDOC
+  end
+
+  def item
+    {
+      id: id,
+      content_html: html,
+      url: url,
+      date_published: published,
+      author: {
+        name: author_name,
+        url: "https://instagram.com/#{@username}",
+        avatar: profile_image_url,
+        _microblog: {
+          username: @username
+        }
+      }
+    }
   end
 
   private
@@ -54,7 +88,7 @@ class Post
           host: "www.instagram.com",
           path: "/p/#{@shortcode}/"
         )
-        request(uri)
+        request(uri).body.force_encoding("UTF-8")
       end
     end
 
