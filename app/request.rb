@@ -1,13 +1,18 @@
 class Request
 
-  attr_reader :uri, :request
+  attr_reader :uri, :request, :use_cache
 
-  def initialize(uri)
+  def initialize(uri, use_cache)
     @uri = uri
+    @use_cache = use_cache
   end
 
-  def self.get(uri)
-    new(uri).cached_request
+  def self.get(uri, use_cache: true)
+    if use_cache
+      new(uri, use_cache).cached_request
+    else
+      new(uri, use_cache).request
+    end
   end
 
   def cached_request

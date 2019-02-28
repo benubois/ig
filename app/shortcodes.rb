@@ -9,7 +9,7 @@ class Shortcodes
   end
 
   def result
-    response = Request.get(uri)
+    response = Request.get(uri, use_cache: false)
     response.scan(/"shortcode":"(.*?)"/).flatten
   end
 
