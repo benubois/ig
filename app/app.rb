@@ -10,6 +10,7 @@ require "net/http"
 require "digest"
 
 require_relative "request"
+require_relative "cache"
 require_relative "feed"
 require_relative "post"
 require_relative "shortcodes"

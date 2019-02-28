@@ -12,7 +12,7 @@ class FeedController < WEBrick::HTTPServlet::AbstractServlet
     if username = request.query["username"]
 
       shortcodes = Shortcodes.find(username)
-      if shortcodes
+      if !shortcodes.empty?
         feed = Feed.new(username, shortcodes, request.request_uri)
         body = feed.render
 

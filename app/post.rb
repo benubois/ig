@@ -89,7 +89,7 @@ class Post
           host: "www.instagram.com",
           path: "/p/#{@shortcode}/"
         )
-        Request.get(uri)
+        Cache.fetch(uri.to_s) { Request.get(uri) }
       end
     end
 
@@ -100,7 +100,8 @@ class Post
           path: "/oembed/",
           query: "url=#{url}"
         )
-        JSON.load(Request.get(uri))
+        body = Cache.fetch(uri.to_s) { Request.get(uri) }
+        JSON.load(body)
       end
     end
 
