@@ -18,43 +18,36 @@ class Post
     @shortcode
   end
 
-  def display_src
-    "https://instagram.com/p/#{@shortcode}/media/?size=l"
+  def primary_image_url
+    image_src(@shortcode)
   end
 
-  def caption
-    oembed.dig("title").split("\n").reject(&:empty?).join("<br>")
-  end
-
-  def video_url
-    post_markup.scan(/<meta.*og:video.*content="(.*)".*/i).flatten.first
-  end
-
-  def profile_image_url
-    post_markup.scan(/"profile_pic_url":"([^"]+)","username":"#{Regexp.quote(@username)}"/).flatten.first
-  end
-
-  def author_name
-    name = post_markup.scan(/<meta.*og:title.*content="(.*)/i).flatten.first.split(" on Instagram")
-    if name.length > 1
-      name.first
+  def main_media
+    if page.video?
+      %Q(<video src="#{page.video_url}" poster="#{primary_image_url}" />)
     else
-      @username
+      linked_image(@shortcode)
     end
-  rescue
-    @username
   end
 
-  def media
-    if video_url
-      %Q(<video src="#{video_url}" poster="#{display_src}" />)
-    else
-      %Q(<a href="#{display_src}"><img src="#{display_src}" /></a>)
-    end
+  def gallery
+    page.gallery.map {|shortcode| linked_image(shortcode) }.join("\n")
   end
 
   def html
-    %Q(<p>#{media}</p> <p>#{caption}</p>)
+    String.new.tap do |string|
+      string << %Q(<p>#{main_media}</p>)
+      string << %Q(<p>#{page.caption}</p>) if !page.caption.empty?
+      string << %Q(<p>#{gallery}</p>) if !gallery.empty?
+    end
+  end
+
+  def author_name
+    page.author_name
+  end
+
+  def profile_image_url
+    page.profile_image_url
   end
 
   def item
@@ -76,33 +69,16 @@ class Post
 
   private
 
-    def request(uri)
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      request = Net::HTTP::Get.new(uri.request_uri)
-      http.request(request)
+    def page
+      @page ||= Page.new(@shortcode, @username)
     end
 
-    def post_markup
-      @post_markup ||= begin
-        uri = URI::HTTPS.build(
-          host: "www.instagram.com",
-          path: "/p/#{@shortcode}/"
-        )
-        Cache.fetch(uri.to_s) { Request.get(uri) }
-      end
+    def linked_image(shortcode)
+      %Q(<a href="#{image_src(shortcode)}"><img src="#{image_src(shortcode)}" /></a>)
     end
 
-    def oembed
-      @oembed ||= begin
-        uri = URI::HTTPS.build(
-          host: "api.instagram.com",
-          path: "/oembed/",
-          query: "url=#{url}"
-        )
-        body = Cache.fetch(uri.to_s) { Request.get(uri) }
-        JSON.load(body)
-      end
+    def image_src(shortcode)
+      "https://instagram.com/p/#{shortcode}/media/?size=l"
     end
 
 end
