@@ -1,7 +1,6 @@
 require "json"
 
 class Feed
-
   def initialize(username, shortcodes, request_uri)
     @username = username
     @shortcodes = shortcodes
@@ -35,8 +34,7 @@ class Feed
       home_page_url: "https://instagram.com/#{@username}",
       feed_url: @request_uri.to_s,
       icon: posts.first.profile_image_url,
-      items: posts.map(&:item)
+      items: posts.map(&:item),
     })
   end
-
 end

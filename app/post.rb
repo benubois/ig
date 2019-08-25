@@ -1,5 +1,4 @@
 class Post
-
   def initialize(shortcode, username)
     @shortcode = shortcode
     @username = username
@@ -11,7 +10,7 @@ class Post
 
   def published
     date = Time.now
-    date.utc.strftime '%Y-%m-%dT%H:%M:%S%z'
+    date.utc.strftime "%Y-%m-%dT%H:%M:%S%z"
   end
 
   def id
@@ -24,21 +23,21 @@ class Post
 
   def main_media
     if page.video?
-      %Q(<video src="#{page.video_url}" poster="#{primary_image_url}" />)
+      %(<video src="#{page.video_url}" poster="#{primary_image_url}" />)
     else
       linked_image(@shortcode)
     end
   end
 
   def gallery
-    page.gallery.map {|shortcode| linked_image(shortcode) }.join("\n")
+    page.gallery.map { |shortcode| linked_image(shortcode) }.join("\n")
   end
 
   def html
-    String.new.tap do |string|
-      string << %Q(<p>#{main_media}</p>)
-      string << %Q(<p>#{page.caption}</p>) if !page.caption.empty?
-      string << %Q(<p>#{gallery}</p>) if !gallery.empty?
+    "".tap do |string|
+      string << %(<p>#{main_media}</p>)
+      string << %(<p>#{page.caption}</p>) unless page.caption.empty?
+      string << %(<p>#{gallery}</p>) unless gallery.empty?
     end
   end
 
@@ -61,24 +60,23 @@ class Post
         url: "https://instagram.com/#{@username}",
         avatar: profile_image_url,
         _instagram: {
-          username: @username
-        }
-      }
+          username: @username,
+        },
+      },
     }
   end
 
   private
 
-    def page
-      @page ||= Page.new(@shortcode, @username)
-    end
+  def page
+    @page ||= Page.new(@shortcode, @username)
+  end
 
-    def linked_image(shortcode)
-      %Q(<a href="#{image_src(shortcode)}"><img src="#{image_src(shortcode)}" /></a>)
-    end
+  def linked_image(shortcode)
+    %(<a href="#{image_src(shortcode)}"><img src="#{image_src(shortcode)}" /></a>)
+  end
 
-    def image_src(shortcode)
-      "https://instagram.com/p/#{shortcode}/media/?size=l"
-    end
-
+  def image_src(shortcode)
+    "https://instagram.com/p/#{shortcode}/media/?size=l"
+  end
 end

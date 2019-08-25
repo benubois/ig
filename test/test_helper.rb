@@ -4,6 +4,6 @@ require "coveralls"
 Coveralls.wear!
 
 require "minitest/autorun"
-require 'webmock/minitest'
+require "webmock/minitest"
 
 require "app"

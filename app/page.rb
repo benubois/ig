@@ -1,5 +1,4 @@
 class Page
-
   def initialize(shortcode, username)
     @shortcode = shortcode
     @username = username
@@ -32,7 +31,7 @@ class Page
 
   def gallery
     shortcodes = markup.scan(/"shortcode":"(.*?)"/).flatten
-    shortcodes = shortcodes - [@shortcode]
+    shortcodes -= [@shortcode]
     shortcodes.shift
     shortcodes
   end
@@ -47,27 +46,26 @@ class Page
 
   private
 
-    def markup
-      @markup ||= begin
-        uri = URI::HTTPS.build(
-          host: "www.instagram.com",
-          path: "/p/#{@shortcode}/"
-        )
-        Cache.fetch(uri.to_s) { Request.get(uri) }
-      end
+  def markup
+    @markup ||= begin
+      uri = URI::HTTPS.build(
+        host: "www.instagram.com",
+        path: "/p/#{@shortcode}/"
+      )
+      Cache.fetch(uri.to_s) { Request.get(uri) }
     end
+  end
 
-    def oembed
-      @oembed ||= begin
-        url = "https://www.instagram.com/p/#{@shortcode}/"
-        uri = URI::HTTPS.build(
-          host: "api.instagram.com",
-          path: "/oembed/",
-          query: "url=#{url}"
-        )
-        body = Cache.fetch(uri.to_s) { Request.get(uri) }
-        JSON.load(body)
-      end
+  def oembed
+    @oembed ||= begin
+      url = "https://www.instagram.com/p/#{@shortcode}/"
+      uri = URI::HTTPS.build(
+        host: "api.instagram.com",
+        path: "/oembed/",
+        query: "url=#{url}"
+      )
+      body = Cache.fetch(uri.to_s) { Request.get(uri) }
+      JSON.load(body)
     end
-
+  end
 end

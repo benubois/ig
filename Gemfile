@@ -6,4 +6,8 @@ group :test do
   gem "minitest"
 end
 
-gem 'coveralls', require: false
+group :development do
+  gem "standard"
+end
+
+gem "coveralls", require: false

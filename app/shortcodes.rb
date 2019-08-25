@@ -1,5 +1,4 @@
 class Shortcodes
-
   def self.find(user)
     new(user).result
   end
@@ -20,7 +19,4 @@ class Shortcodes
       )
     end
   end
-
 end
-
-

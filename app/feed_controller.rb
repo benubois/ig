@@ -1,5 +1,4 @@
 class FeedController < WEBrick::HTTPServlet::AbstractServlet
-
   def do_GET(request, response)
     response.keep_alive = false
     case request.path
@@ -24,5 +23,4 @@ class FeedController < WEBrick::HTTPServlet::AbstractServlet
       end
     end
   end
-
 end
