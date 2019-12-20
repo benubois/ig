@@ -13,7 +13,10 @@ class Page
   end
 
   def profile_image_url
-    @profile_image_url ||= markup.scan(/"profile_pic_url":"([^"]+)","username":"#{Regexp.quote(@username)}"/).flatten.first
+    @profile_image_url ||= begin
+      url = markup.scan(/"profile_pic_url":"([^"]+)","username":"#{Regexp.quote(@username)}"/).flatten.first
+      url = JSON.load('{"url": "%s"}' % url)
+    end
   end
 
   def author_name
