@@ -27,6 +27,14 @@ class Feed
     end
   end
 
+  def items
+    posts.map do |post|
+      if post.valid?
+        post.item
+      end
+    end.compact
+  end
+
   def render
     JSON.dump({
       version: "https://jsonfeed.org/version/1",
@@ -34,7 +42,7 @@ class Feed
       home_page_url: "https://instagram.com/#{@username}",
       feed_url: @request_uri.to_s,
       icon: posts.first.profile_image_url,
-      items: posts.map(&:item),
+      items: items,
     })
   end
 end

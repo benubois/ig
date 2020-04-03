@@ -49,6 +49,10 @@ class Post
     page.profile_image_url
   end
 
+  def valid?
+    !page.profile_image_url.nil? && page.profile_image_url != ""
+  end
+
   def item
     {
       id: id,
