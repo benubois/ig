@@ -34,10 +34,7 @@ class Page
   end
 
   def gallery
-    shortcodes = markup.scan(/"shortcode":"(.*?)"/).flatten
-    shortcodes -= [@shortcode]
-    shortcodes.shift
-    shortcodes
+    []
   end
 
   def video?
