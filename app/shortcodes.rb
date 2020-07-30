@@ -8,7 +8,7 @@ class Shortcodes
   end
 
   def result
-    Request.get(uri).scan(/"shortcode":"(.*?)"/).flatten.first(10)
+    Request.get(uri).scan(/"shortcode":"(.*?)"/).flatten.first(3)
   end
 
   def uri
