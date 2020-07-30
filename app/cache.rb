@@ -1,12 +1,13 @@
 class Cache
-  def self.fetch(key, &block)
-    new(key, block).send(:cache)
+  def self.fetch(key, options = {}, &block)
+    new(key, options, block).send(:cache)
   end
 
   private
 
-  def initialize(key, block)
+  def initialize(key, options, block)
     @key = key
+    @options = options
     @block = block
   end
 
@@ -15,7 +16,13 @@ class Cache
   end
 
   def cached?
-    File.file?(cache_file)
+    age < @options.fetch(:ttl, Time.now.to_i)
+  rescue Errno::ENOENT
+    false
+  end
+
+  def age
+    Time.now.to_i - File.stat(cache_file).mtime.to_i
   end
 
   def read
